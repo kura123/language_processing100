@@ -1,5 +1,5 @@
-# 37. 「猫」と共起頻度の高い上位10語Permalink
-# 「猫」とよく共起する（共起頻度が高い）10語とその出現頻度をグラフ（例えば棒グラフなど）で表示せよ．
+# 39. Zipfの法則Permalink
+# 単語の出現頻度順位を横軸，その出現頻度を縦軸として，両対数グラフをプロットせよ．
 import re
 from collections import defaultdict
 import matplotlib.pyplot as plt
@@ -32,15 +32,17 @@ with open(filepath, encoding='utf-8') as f:
 block = list(filter(lambda x: x != '', block))
 result30 = [parse(y) for y in block]
 result35 = [getLongestNoun(x) for x in result30]
-list = list(filter(lambda x: '猫_名詞_一般' in x, result35))
 dict = defaultdict(int)
-for wordlist in list:
+for wordlist in result35:
     for word in wordlist:
-        if word != '猫_名詞_一般':
-            dict[word] += 1
-result = sorted(dict.items(), key=lambda x: x[1], reverse=True)
-labels = [la[0] for la in result[:10]]
-values = [va[1] for va in result[:10]]
-plt.figure(figsize=(10, 8))
-plt.barh(labels, values)
+        dict[word] += 1
+result35 = sorted(dict.items(), key=lambda x: x[1], reverse=True)
+x = [x+1 for x in range(len(result35))]
+y = [y[1] for y in result35]
+plt.plot(x, y)
+ax = plt.gca()
+ax.set_yscale('log')
+ax.set_xscale('log')
+plt.xlabel('単語の出現頻度順位',fontsize=14)
+plt.ylabel('出現頻度を縦軸',fontsize=14)
 plt.show()

@@ -1,5 +1,6 @@
-# 37. 「猫」と共起頻度の高い上位10語Permalink
-# 「猫」とよく共起する（共起頻度が高い）10語とその出現頻度をグラフ（例えば棒グラフなど）で表示せよ．
+# 38. ヒストグラムPermalink
+# 単語の出現頻度のヒストグラムを描け．ただし，横軸は出現頻度を表し，1から単語の出現頻度の最大値までの線形目盛とする．
+# 縦軸はx軸で示される出現頻度となった単語の異なり数（種類数）である．
 import re
 from collections import defaultdict
 import matplotlib.pyplot as plt
@@ -32,15 +33,16 @@ with open(filepath, encoding='utf-8') as f:
 block = list(filter(lambda x: x != '', block))
 result30 = [parse(y) for y in block]
 result35 = [getLongestNoun(x) for x in result30]
-list = list(filter(lambda x: '猫_名詞_一般' in x, result35))
 dict = defaultdict(int)
-for wordlist in list:
+for wordlist in result35:
     for word in wordlist:
-        if word != '猫_名詞_一般':
-            dict[word] += 1
-result = sorted(dict.items(), key=lambda x: x[1], reverse=True)
-labels = [la[0] for la in result[:10]]
-values = [va[1] for va in result[:10]]
-plt.figure(figsize=(10, 8))
-plt.barh(labels, values)
+        dict[word] += 1
+result35 = sorted(dict.items(), key=lambda x: x[1], reverse=True)
+plt.figure(figsize=(8, 8))
+print(dict.values())
+plt.hist(dict.values(), bins=100)
+plt.title('ヒストグラム')
+plt.xlabel('出現頻度')
+plt.ylabel('単語の種類数')
+plt.xlim(xmin=1, xmax=400)
 plt.show()
